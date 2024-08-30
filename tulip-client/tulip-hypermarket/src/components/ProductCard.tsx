@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -5,6 +7,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import { useCart } from "@/context/CartContext";
 
 interface Product {
   id: number;
@@ -18,6 +21,12 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(product);
+  };
+
   return (
     <Card>
       <CardMedia
@@ -33,7 +42,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <Typography variant="body2" color="text.secondary">
           ${product.price.toFixed(2)}
         </Typography>
-        <Button variant="contained" color="primary" className="mt-2">
+        <Button
+          variant="contained"
+          color="primary"
+          className="mt-2"
+          onClick={handleAddToCart}
+        >
           Add to Cart
         </Button>
       </CardContent>

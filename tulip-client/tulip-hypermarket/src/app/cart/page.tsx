@@ -3,18 +3,11 @@
 import { Typography, Box, Button, Paper } from "@mui/material";
 import { motion } from "framer-motion";
 import CartItem from "@/components/CartItem";
-
-// Mock data for cart items
-const cartItems = [
-  { id: 1, name: "Product 1", price: 19.99, quantity: 2 },
-  { id: 2, name: "Product 2", price: 29.99, quantity: 1 },
-];
+import { useCart } from "@/context/CartContext";
 
 export default function Cart() {
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const { cart, clearCart } = useCart();
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <Box className="flex flex-col items-center justify-center min-h-screen p-4">
@@ -33,15 +26,33 @@ export default function Cart() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Paper elevation={3} className="p-6 mt-4 max-w-2xl w-full">
-          {cartItems.map((item) => (
-            <CartItem key={item.id} item={item} />
-          ))}
-          <Typography variant="h6" className="mt-4">
-            Total: ${total.toFixed(2)}
-          </Typography>
-          <Button variant="contained" color="primary" className="mt-4">
-            Proceed to Checkout
-          </Button>
+          {cart.length === 0 ? (
+            <Typography>Your cart is empty.</Typography>
+          ) : (
+            <>
+              {cart.map((item) => (
+                <CartItem key={item.id} item={item} />
+              ))}
+              <Typography variant="h6" className="mt-4">
+                Total: ${total.toFixed(2)}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                className="mt-4"
+                onClick={clearCart}
+              >
+                Clear Cart
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                className="mt-4 ml-2"
+              >
+                Proceed to Checkout
+              </Button>
+            </>
+          )}
         </Paper>
       </motion.div>
     </Box>
